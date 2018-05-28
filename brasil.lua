@@ -15,11 +15,10 @@ local adicionar = 5
 local remover = 5
 local holding
 
--- As tabelas servem para rastrear tipos similares de informação
-local tutuTable = {} -- Tabela para armazenar os tutus
-local maxtutu = 30 -- Quantidade máxima de tutus criados no jogo
-local sapatilhaTable = {} -- Tabela para armazenar os sapatilhas
-local maxSapatilha = 30 -- Quantidade máxima de sapatilhas criados no jogo
+local injecaoTable = {}
+local sapatilhaTable = {} 
+local lacoTable = {}
+local remedioTable = {}
 
 local bailarina -- Variavél reservada para a personagem do jogo
 local gameLoopTimer -- Implementação de um timer
@@ -32,7 +31,7 @@ local diminuiu = audio.loadSound( "sons/diminuiu.mp3" )
 local somou = audio.loadSound( "sons/somou.wav" )
 local nivel = audio.loadSound( "sons/novonivel.wav" )
 local backgroundMusic = audio.loadStream( "sons/brasil.mp3" )
-local gameover = audio.loadSound( "sons/gameover.mp3" )
+local gameover = audio.loadSound( "sons/gameover.wav" )
 
 -- A ordem que os grupos foram criados define a ordem que são exibidos
 
@@ -213,65 +212,103 @@ function scene:create( event )
 	end
 	
 	local function createSapatilha()
-		local newSapatilha = display.newImageRect(uiGroup, "img/base/sapatilha.png", 476, 720)
-		newSapatilha.yScale = 0.05
-		newSapatilha.xScale =  0.05
+		local newSapatilha = display.newImageRect(uiGroup, "img/base/sapatilha.png", 66, 84)
+		newSapatilha.yScale = 0.5
+		newSapatilha.xScale =  0.5
 		newSapatilha.myName = "sapatilha"
-		uiGroup:insert(newSapatilha)
 		table.insert(sapatilhaTable, newSapatilha) --Adiciona o objeto sapatinha na tabela
 		physics.addBody( newSapatilha, "kinematic", { isSensor = true, radius=10, bounce=0, density = 0.0015 } )
-		--physics.addBody(newSapatilha)
 
 		local whereFromSapatilha = math.random(2)
 			if ( whereFromSapatilha == 1 ) then
 				newSapatilha.x = largura + 10
-				newSapatilha.y = display.contentCenterY
+				newSapatilha.y = display.contentCenterY + 20
 				newSapatilha:setLinearVelocity(-200, 0 )
 
 			elseif ( whereFromSapatilha == 2 ) then
-				newSapatilha.x = largura + 310
-				newSapatilha.y = 230
+				newSapatilha.x = largura + 210
+				newSapatilha.y = 250
 				newSapatilha:setLinearVelocity(-200, 0 )
 			end
 			--x,y
 	end
 
+	local function createInjecao()
+		local newInjecao = display.newImageRect(uiGroup, "img/base/injecao.png", 66, 84)
+		newInjecao.yScale = 0.5
+		newInjecao.xScale =  0.5
+		newInjecao.myName = "injecao"
+		table.insert(injecaoTable, newInjecao)
+		physics.addBody( newInjecao, "kinematic", { isSensor = true, radius=10, bounce=0, density = 0.0015 } )
 
-	local function createTutu()
-		local newTutu = display.newImageRect(uiGroup, "img/base/tutu.png", 360, 720)
-		newTutu.yScale = 0.05
-		newTutu.xScale =  0.05
-		newTutu.myName = "tutu"
-		uiGroup:insert(newTutu)
-		table.insert(tutuTable, newTutu) --Adiciona o objeto tutu na tabela
-		physics.addBody( newTutu, "kinematic", { isSensor = true, radius=10, bounce=0, density = 0.0015 } )
-		--physics.addBody(newTutu)
-		
-		local whereFromTutu = math.random(2)
-			if ( whereFromTutu == 1 ) then
-				newTutu.x = largura + 510
-				newTutu.y = display.contentCenterY
-				newTutu:setLinearVelocity(-200, 0 )
+		local whereFromInjecao = math.random(2)
+			if ( whereFromInjecao == 1 ) then
+				newInjecao.x = largura + 110
+				newInjecao.y = display.contentCenterY + 20
+				newInjecao:setLinearVelocity(-200, 0 )
 
-			elseif ( whereFromTutu == 2 ) then
-				newTutu.x = largura + 810
-				newTutu.y = 230
-				newTutu:setLinearVelocity(-200, 0 )
+			elseif ( whereFromInjecao == 2 ) then
+				newInjecao.x = largura + 310
+				newInjecao.y = 250
+				newInjecao:setLinearVelocity(-200, 0 )
 			end
 			--x,y
 	end
 
-	
+	local function createLaco()
+		local newLaco = display.newImageRect(uiGroup, "img/base/laco.png", 66, 84)
+		newLaco.yScale = 0.5
+		newLaco.xScale =  0.5
+		newLaco.myName = "laco"
+		table.insert(lacoTable, newLaco)
+		physics.addBody( newLaco, "kinematic", { isSensor = true, radius=10, bounce=0, density = 0.0015 } )
 
-	
+		local whereFromLaco = math.random(2)
+			if ( whereFromLaco == 1 ) then
+				newLaco.x = largura + 410
+				newLaco.y = display.contentCenterY + 20
+				newLaco:setLinearVelocity(-200, 0 )
+
+			elseif ( whereFromLaco == 2 ) then
+				newLaco.x = largura + 610
+				newLaco.y = 250
+				newLaco:setLinearVelocity(-200, 0 )
+			end
+			--x,y
+	end
+
+	local function createRemedio()
+		local newRemedio = display.newImageRect(uiGroup, "img/base/remedio.png", 66, 84)
+		newRemedio.yScale = 0.5
+		newRemedio.xScale =  0.5
+		newRemedio.myName = "remedio"
+		table.insert(remedioTable, newRemedio)
+		physics.addBody( newRemedio, "kinematic", { isSensor = true, radius=10, bounce=0, density = 0.0015 } )
+
+		local whereFromRemedio = math.random(2)
+			if ( whereFromRemedio == 1 ) then
+				newRemedio.x = largura + 510
+				newRemedio.y = display.contentCenterY + 20
+				newRemedio:setLinearVelocity(-200, 0 )
+
+			elseif ( whereFromRemedio == 2 ) then
+				newRemedio.x = largura + 710
+				newRemedio.y = 250
+				newRemedio:setLinearVelocity(-200, 0 )
+			end
+			--x,y
+	end
+
 
 
 	local function gameLoop()
-		createTutu()
-		createSapatilha()
-		createTutu()
 
-		for i = #sapatilhaTable, 1, -1 do -- Começa da qunatidade que tem na sapatilhaTable ate 1, sempre decrementando -1
+		createSapatilha()
+		createInjecao()
+		createLaco()
+		createRemedio()
+
+		for i = #sapatilhaTable, 1, -1 do
 			local thisSapatilha = sapatilhaTable[i]
 
 			if (thisSapatilha.x < -10)
@@ -280,17 +317,36 @@ function scene:create( event )
 				table.remove( sapatilhaTable, i )
 			end
 		end
-		for i = #tutuTable, 1, -1 do -- Começa da quantidade que tem na tutuTable ate 1, sempre decrementando -1
-			local thisTutu = tutuTable[i]
+		for i = #injecaoTable, 1, -1 do
+			local thisinjecao = injecaoTable[i]
 
-			if (thisTutu.x < -10)
+			if (thisinjecao.x < -10)
 			then
-				display.remove( thisTutu)
-				table.remove( tutuTable, i)
+				display.remove( thisinjecao)
+				table.remove( injecaoTable, i)
+			end
+		end
+		for i = #remedioTable, 1, -1 do
+			local thisremedio = remedioTable[i]
+
+			if (thisremedio.x < -10)
+			then
+				display.remove( thisremedio)
+				table.remove( remedioTable, i)
+			end
+		end
+		for i = #lacoTable, 1, -1 do 
+			local thislaco = lacoTable[i]
+
+			if (thislaco.x < -10)
+			then
+				display.remove( thislaco)
+				table.remove( lacoTable, i)
 			end
 		end
 
 	end
+
 
 gameLoopTimer = timer.performWithDelay( 3000, gameLoop, 0 )
 
@@ -328,8 +384,9 @@ local function onCollision( event )
 			if ( died == false ) then
 					died = true
 			
-				for i = #sapatilhaTable, 1, -1 do -- Começa da quantidade que tem na tutuTsapatilhaTable ate 1, sempre decrementando -1
+				for i = #sapatilhaTable, 1, -1 do 
 					if ( sapatilhaTable[i] == obj1 or sapatilhaTable[i] == obj2 ) then
+						-- Acrescenta score
 						sapatilhaTable[i].alpha = 0
 						score = score + adicionar
 						scoreText.text = "Experiência: " .. score
@@ -340,29 +397,27 @@ local function onCollision( event )
 				end
 
 				if ( score > 49 ) then
-					audio.pause()
 					display.remove(mainGroup)
 					display.remove(uiGroup)
 					display.remove(backGroup)
 					display.remove( running )
-					display.remove( newTutu )
+					display.remove( newinjecao )
                     display.remove( newSapatilha )
-					audio.play( nivel )
-					novoNivel()						
+					novoNivel()		
 				end	
 			end
 			
 
 			--Finge que é algo que mata 
-		elseif( (obj1.myName == "running" and obj2.myName == "tutu") or 
-				(obj1.myName == "tutu" and obj2.myName == "running"))
+		elseif( (obj1.myName == "running" and obj2.myName == "injecao") or 
+				(obj1.myName == "injecao" and obj2.myName == "running"))
 			then
 				if ( died == false ) then
 					died = true
 
-					for j = #tutuTable, 1, -1 do
-						if ( tutuTable[j] == obj1 or tutuTable[i] == obj2 ) then
-							tutuTable[j].alpha = 0
+					for i = #injecaoTable, 1, -1 do
+						if ( injecaoTable[i] == obj1 or injecaoTable[i] == obj2 ) then
+							injecaoTable[i].alpha = 0
 							score = score - remover
 							scoreText.text = "Experiência: " .. score
 							died = true
@@ -374,34 +429,75 @@ local function onCollision( event )
 
 					-- Verificar se atingiu a pontuação minima de scores
 					if ( score < -9 ) then
-						running.alpha = 0
-						audio.pause()
 						display.remove(mainGroup)
 						display.remove(uiGroup)
-						display.remove(backGroup)
-						display.remove( running )
-						display.remove( newTutu )
-                    	display.remove( newSapatilha )
-						audio.play( gameover )
+						display.remove(backGroup)	
 						gameOver()
-						--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 					else
 						timer.performWithDelay( 500, restoreBailarina)
 					end
 				end
 
-		elseif( (obj1.myName == "running" and obj2.myName == "chao") or 
-				(obj1.myName == "chao" and obj2.myName == "running"))
+			elseif (  (obj1.myName == "running" and obj2.myName == "remedio") or  
+				(obj1.myName == "remedio" and obj2.myName == "running"))
 			then
-					if ( died == false ) then
+				if ( died == false ) then
 						died = true
-
-						for i = #chaoTable, 1, -1 do
-							if ( chao == obj1 or chao == obj2 ) then
-								running:setSequence("normalRun")
-							end
+				
+					for i = #remedioTable, 1, -1 do
+						if ( remedioTable[i] == obj1 or remedioTable[i] == obj2 ) then
+							-- Acrescenta score
+							remedioTable[i].alpha = 0
+							score = score - remover
+							scoreText.text = "Experiência: " .. score
+							audio.play( diminuiu )
+							timer.performWithDelay( 500, restoreBailarina)
+							break	
 						end
 					end
+	
+					if ( score > 49 ) then
+						display.remove(mainGroup)
+						display.remove(uiGroup)
+						display.remove(backGroup)
+						display.remove( running )
+						display.remove( newinjecao )
+						display.remove( newSapatilha )
+						novoNivel()		
+					end	
+				end
+				
+	
+				--Finge que é algo que mata 
+			elseif( (obj1.myName == "running" and obj2.myName == "laco") or 
+					(obj1.myName == "laco" and obj2.myName == "running"))
+				then
+					if ( died == false ) then
+						died = true
+	
+						for i = #lacoTable, 1, -1 do
+							if ( lacoTable[i] == obj1 or lacoTable[i] == obj2 ) then
+								lacoTable[i].alpha = 0
+								score = score + adicionar
+								scoreText.text = "Experiência: " .. score
+								died = true
+								audio.play( somou )
+								timer.performWithDelay( 500, restoreBailarina)
+								break
+							end
+						end
+	
+						-- Verificar se atingiu a pontuação minima de scores
+						if ( score < -9 ) then
+							display.remove(mainGroup)
+							display.remove(uiGroup)
+							display.remove(backGroup)	
+							gameOver()						
+						else
+							timer.performWithDelay( 500, restoreBailarina)
+						end
+					end
+	
 
 		end
 	end

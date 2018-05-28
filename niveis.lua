@@ -22,17 +22,17 @@ local function africa()
 	composer.gotoScene("africa")
 end
 
---[[local function alemanha()
-	composer.gotoScene("alemanha")
+local function alemanha()
+	composer.gotoScene("reforma")
 end
 
 local function japao()
-	composer.gotoScene("japao")
+	composer.gotoScene("reforma")
 end
 
 local function franca()
-	composer.gotoScene("franca")
-end]]
+	composer.gotoScene("reforma")
+end
 
 local function gotoMenu()
 composer.gotoScene("menu")
@@ -86,7 +86,7 @@ function scene:create( event )
 	nivel4.yScale = 0.4
 	nivel4.xScale = 0.4
 	sceneGroup:insert(nivel4)
-	--nivel4:addEventListener("tap", alemanha)
+	nivel4:addEventListener("tap", alemanha)
 
 
 	local nivel5 = display.newImage("img/niveis/nivel5.png") -- Coreia do sul/Japao
@@ -95,7 +95,7 @@ function scene:create( event )
 	nivel5.yScale = 0.4
 	nivel5.xScale = 0.4
 	sceneGroup:insert(nivel5)
-	--nivel5:addEventListener("tap", japao)
+	nivel5:addEventListener("tap", japao)
 
 
 	local nivel6 = display.newImage("img/niveis/nivel6.png") -- Franca
@@ -104,7 +104,7 @@ function scene:create( event )
 	nivel6.yScale = 0.4
 	nivel6.xScale = 0.4
 	sceneGroup:insert(nivel6)
-	--nivel6:addEventListener("tap", franca)
+	nivel6:addEventListener("tap", franca)
 
 	local voltar = display.newImage("img/base/voltar.png")
 	voltar.x = largura - 2
