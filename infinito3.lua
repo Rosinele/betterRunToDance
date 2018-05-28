@@ -15,8 +15,8 @@ math.randomseed( os.time() )
 
 local score = 0 -- Scores iniciados com valor o
 local died = false -- Inicia com o jogador vivo
-local adicionar = 5
-local remover = 5
+local adicionar = 25
+local remover = 25
 local holding
 
 -- As tabelas servem para rastrear tipos similares de informação
@@ -310,7 +310,7 @@ local function gameOver()
 end
 
 local function novoNivel()
-	composer.gotoScene("parabens")
+	composer.gotoScene("niveis")
 end
 
 
@@ -341,10 +341,14 @@ local function onCollision( event )
 					end
 				end
 
-				if ( score > 49 ) then
-					audio.play( nivel )
-					died = true
-					novoNivel()	
+				if ( score > 299) then
+					display.remove(mainGroup)
+					display.remove(uiGroup)
+					display.remove(backGroup)
+					display.remove( running )
+					display.remove( newTutu )
+                    display.remove( newSapatilha )
+					novoNivel()		
 				end	
 			end
 			
@@ -369,7 +373,7 @@ local function onCollision( event )
 					end
 
 					-- Verificar se atingiu a pontuação minima de scores
-					if ( score < -9 ) then
+					if ( score < -49 ) then
 						display.remove(mainGroup)
 						display.remove(uiGroup)
 						display.remove(backGroup)	
