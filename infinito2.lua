@@ -31,7 +31,7 @@ local scoreText -- Exibir pontuação
 local baseline = 280
 
 --Sons
-local diminuiu = audio.loadSound( "sons/diminuiu.mp3" )
+local diminuiu = audio.loadSound( "sons/diminuiu.wav" )
 local somou = audio.loadSound( "sons/somou.wav" )
 local nivel = audio.loadSound( "sons/novonivel.wav" )
 local backgroundMusic = audio.loadStream( "sons/infinito.mp3" )
@@ -517,8 +517,8 @@ end
 
 
 	local function jumping(event)
-				running:applyLinearImpulse(0, -0.06, running.x, running.y)
-				--running:setSequence("jumping")
+		running:applyLinearImpulse(0, -0.06, running.x, running.y)
+		--running:setSequence("jumping")
 	end
 	 
 	background:addEventListener( "tap", jumping )
@@ -617,10 +617,11 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
+		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
-
+		composer.removeScene( "infinito2" )
 	end
 end
 
@@ -629,13 +630,6 @@ end
 function scene:destroy( event )
 
 	local sceneGroup = self.view
-	audio.stop(diminuiu)
-	audio.stop(nivel)
-	audio.stop(somou)
-	display.remove(uiGroup)
-	display.remove(background)
-	display.remove(mainGroup)
-
 
 end
 

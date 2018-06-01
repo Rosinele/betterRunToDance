@@ -47,7 +47,6 @@ function scene:create( event )
 	physics.start()
 	physics.setGravity(0, 9.8)
 	audio.play( backgroundMusic )
-	audio.play( backgroundMusic )
 
 	local sceneGroup = self.view
 	--physics.pause()
@@ -352,44 +351,6 @@ function scene:create( event )
 gameLoopTimer = timer.performWithDelay( 4000, gameLoop, 0 )
 
 
-function pauseGame()
-	gamePaused = true
-	running:pause()
-	physics.pause()
-	timer.pause(gameLoop)
-	timer.pause(gameLoopTimer)
-	local pauseGroup = display.newGroup()
-
-	local pauserect = display.newRect(0, 0, display.contentWidth+450, 640)
-	pauserect.x = display.contentWidth/2 + 180
-	pauserect:setFillColor(0)
-	pauserect.alpha = 0.75
-	pauserect:addEventListener("tap", function() return true end)
-	pauseGroup:insert(pauserect)
-
-	local resumebox = display.newImageRect("img/paredeBackground.png", display.contentWidth/2+200, display.contentHeight/2+100 )
-		resumebox.x = display.contentWidth/2
-		resumebox.y = display.contentHeight/2
-		pauseGroup:insert(resumebox)
-
-	local resumebtn = display.newImageRect("img/voltar.png", 60, 60)
-		resumebtn.x = 100
-		resumebtn.y = 100
-		resumebtn:addEventListener("tap", resumeGame)
-		pauseGroup:insert(resumebtn)
-end
-
-function buildPause(player)
-	local pausebtn = display.newImageRect("img/voltar.png", 60, 60)
-	pausebtn.x = display.contentWidth
-	pausebtn.y = 280
-	pausebtn:addEventListener("tap", pauseGame)
-	playerT = player
-	print(playerT)
-	headerGroup:insert(pausebtn)
-end
-
-
 local function restoreBailarina()
     running.isBodyActive = false
     transition.to( running, { alpha=1, time=30,
@@ -672,9 +633,11 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
+		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
+        composer.removeScene( "infinito1" )
 
 	end
 end
@@ -684,12 +647,6 @@ end
 function scene:destroy( event )
 
 	local sceneGroup = self.view
-	audio.stop(diminuiu)
-	audio.stop(nivel)
-	audio.stop(somou)
-	display.remove(uiGroup)
-	display.remove(background)
-	display.remove(mainGroup)
 
 end
 

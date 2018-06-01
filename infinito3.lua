@@ -529,10 +529,9 @@ end
 	running:pause()
 	end
 
-
 	local function jumping(event)
-				running:applyLinearImpulse(0, -0.06, running.x, running.y)
-				--running:setSequence("jumping")
+		running:applyLinearImpulse(0, -0.06, running.x, running.y)
+		--running:setSequence("jumping")
 	end
 	 
 	background:addEventListener( "tap", jumping )
@@ -631,9 +630,12 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
+		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
+		Runtime:removeEventListener( "collision", onCollision )
+        composer.removeScene( "infinito2" )
 
 	end
 end
@@ -643,13 +645,7 @@ end
 function scene:destroy( event )
 
 	local sceneGroup = self.view
-	audio.stop(diminuiu)
-	audio.stop(nivel)
-	audio.stop(somou)
-	display.remove(uiGroup)
-	display.remove(background)
-	display.remove(mainGroup)
-
+	
 end
 
 
