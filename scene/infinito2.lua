@@ -1,3 +1,7 @@
+--================================================================================
+--===========================    Brasil   ========================================
+--================================================================================
+
 
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -5,14 +9,12 @@ local scene = composer.newScene()
 local largura = display.contentWidth
 local altura = display.contentHeight
 
---physics.setGravity(0, 1) -- definindo o valor da gravidade para 0
-
 math.randomseed( os.time() )
 
 local score = 0 -- Scores iniciados com valor o
 local died = false -- Inicia com o jogador vivo
-local adicionar = 5
-local remover = 5
+local adicionar = 25
+local remover = 25
 local holding
 
 local injecaoTable = {}
@@ -27,10 +29,10 @@ local scoreText -- Exibir pontuação
 local baseline = 280
 
 --Sons
-local diminuiu = audio.loadSound( "sons/diminuiu.mp3" )
+local diminuiu = audio.loadSound( "sons/diminuiu.wav" )
 local somou = audio.loadSound( "sons/somou.wav" )
 local nivel = audio.loadSound( "sons/novonivel.wav" )
-local backgroundMusic = audio.loadStream( "sons/brasil.mp3" )
+local backgroundMusic = audio.loadStream( "sons/infinito.mp3" )
 local gameover = audio.loadSound( "sons/gameover.wav" )
 
 -- A ordem que os grupos foram criados define a ordem que são exibidos
@@ -40,20 +42,14 @@ local mainGroup = display.newGroup()  -- Guarda o personagem e os objetos flutua
 local uiGroup = display.newGroup()    -- Exibir pontuação
 local jumpLimit = 0 
 
-
-local function novoNivel()
-	composer.gotoScene("parabensRussia")
-end
-
-
 function scene:create( event )
 	local physics = require( "physics" )
 	physics.start()
 	physics.setGravity(0, 9.6)
 	audio.play( backgroundMusic )
 	
+	
 	local sceneGroup = self.view
-	--physics.pause()
 
 	sceneGroup:insert(mainGroup)
 -- Background da parede de tijolos do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
@@ -137,7 +133,6 @@ function scene:create( event )
     pause.yScale = 0.3
 	pause.xScale = 0.3
 	sceneGroup:insert(pause)
-	--pause:addEventListener( "tap", gotoMenu )
 
 	local sheetOptions = { width = 67.4, height = 74, numFrames = 20 }
 	--carregamos a spritesheet com as opções
@@ -170,7 +165,6 @@ function scene:create( event )
 	}
 	--criamos um objeto de display com todas as configs anteriores
 	local running = display.newSprite(uiGroup, sheet, sequences )
-	--physics.addBody( running,  "dynamic", { bounce=0} )
 	physics.addBody(running, "dynamic", {radius=15, bounce=0})
 	running.myName = "running"
 	running.x = display.contentWidth / 4 + 40
@@ -183,13 +177,6 @@ function scene:create( event )
 	jumping.xScale = 1.2
 	jumping.yScale = 1.2
 	jumping.isVisible = false;]]
-
-	local ceu = display.newImageRect( backGroup, "img/base/ceu.png", 2117, 142) --https://pixabay.com/
-	ceu.x = 0
-	ceu.y = 0
-	ceu.yScale = 0.7
-	ceu.alpha = 0
-	physics.addBody( ceu, "static" )
 
 	--manda rodar
 	running:play()
@@ -347,7 +334,6 @@ function scene:create( event )
 
 	end
 
-
 gameLoopTimer = timer.performWithDelay( 3000, gameLoop, 0 )
 
 local function restoreBailarina()
@@ -364,11 +350,11 @@ local function restoreBailarina()
 end
 
 local function gameOver()
-	composer.gotoScene("gameover")
+	composer.gotoScene("scene.gameover")
 end
 
-local function parabens()
-	composer.gotoScene("parabens")
+local function novoNivel()
+	composer.gotoScene("scene.infinito3")
 end
 
 local function onCollision( event )
@@ -396,7 +382,7 @@ local function onCollision( event )
 					end
 				end
 
-				if ( score > 49 ) then
+				if ( score > 99 ) then
 					display.remove(mainGroup)
 					display.remove(uiGroup)
 					display.remove(backGroup)
@@ -428,11 +414,12 @@ local function onCollision( event )
 					end
 
 					-- Verificar se atingiu a pontuação minima de scores
-					if ( score < -9 ) then
+					if ( score < -49 ) then
 						display.remove(mainGroup)
 						display.remove(uiGroup)
 						display.remove(backGroup)	
 						gameOver()
+						--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 					else
 						timer.performWithDelay( 500, restoreBailarina)
 					end
@@ -456,7 +443,7 @@ local function onCollision( event )
 						end
 					end
 	
-					if ( score > 49 ) then
+					if ( score > 99 ) then
 						display.remove(mainGroup)
 						display.remove(uiGroup)
 						display.remove(backGroup)
@@ -488,11 +475,12 @@ local function onCollision( event )
 						end
 	
 						-- Verificar se atingiu a pontuação minima de scores
-						if ( score < -9 ) then
+						if ( score < -49 ) then
 							display.remove(mainGroup)
 							display.remove(uiGroup)
 							display.remove(backGroup)	
-							gameOver()						
+							gameOver()
+							--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 						else
 							timer.performWithDelay( 500, restoreBailarina)
 						end
@@ -525,8 +513,8 @@ end
 
 
 	local function jumping(event)
-				running:applyLinearImpulse(0, -0.06, running.x, running.y)
-				--running:setSequence("jumping")
+		running:applyLinearImpulse(0, -0.06, running.x, running.y)
+		--running:setSequence("jumping")
 	end
 	 
 	background:addEventListener( "tap", jumping )
@@ -625,10 +613,11 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
+		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
-
+		composer.removeScene( "infinito2" )
 	end
 end
 
@@ -637,10 +626,9 @@ end
 function scene:destroy( event )
 
 	local sceneGroup = self.view
-	display.remove(uiGroup)
-	display.remove(background)
-	display.remove(mainGroup)
-
+	audio.stop(diminuiu)
+	audio.stop(nivel)
+	audio.stop(somou)
 
 end
 

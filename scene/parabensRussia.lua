@@ -12,11 +12,9 @@ local uiGroup = display.newGroup()    -- Exibir pontuação
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
 
-local function gotoMenu()
-	composer.gotoScene("menu")
+local function gotoProximo()
+	composer.gotoScene("scene.russia")
 end
-
-
 -- create()
 function scene:create( event )
 
@@ -24,21 +22,39 @@ function scene:create( event )
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 	-- O dobro da parede2 para fazer a animação--
 
+	physics.pause()
 
-	local background = display.newImage("img/credito/credito.png")
+	
+
+	local background = display.newImage("img/base/background.png")
 	background.x = largura/2
 	background.y = altura/2
-	background.yScale = 0.3
-	background.xScale = 0.3
+	background.yScale = 0.5
+	background.xScale = 0.5
 	sceneGroup:insert(background)
 
-	local voltar = display.newImage("img/base/voltar.png")
-	voltar.x = largura - 2
-    voltar.y = 40
-    voltar.yScale = 0.3
+	local parabens = display.newImage("img/parabens/parabens.png")
+	parabens.x = largura/2
+	parabens.y = altura/3
+	parabens.yScale = 0.2
+	parabens.xScale = 0.2
+	sceneGroup:insert(parabens)
+
+	local proximo = display.newImage("img/parabens/proximo.png")
+	proximo.x = largura/2
+	proximo.y = altura/2 + 100
+	proximo.yScale = 0.3
+	proximo.xScale = 0.3
+	sceneGroup:insert(proximo)
+	proximo:addEventListener("tap", gotoProximo)
+
+	--[[local voltar = display.newImage("img/gameover/voltar.png")
+	voltar.x = largura/5 * 4
+	voltar.y = altura/2 + 100
+	voltar.yScale = 0.3
 	voltar.xScale = 0.3
 	sceneGroup:insert(voltar)
-	voltar:addEventListener( "tap", gotoMenu )
+	voltar:addEventListener( "tap", gotoMenu )]]
 
 
 end

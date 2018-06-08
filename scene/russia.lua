@@ -30,7 +30,7 @@ local baseline = 280
 local diminuiu = audio.loadSound( "sons/diminuiu.mp3" )
 local somou = audio.loadSound( "sons/somou.wav" )
 local nivel = audio.loadSound( "sons/novonivel.wav" )
-local backgroundMusic = audio.loadStream( "sons/africa.mp3" )
+local backgroundMusic = audio.loadStream( "sons/russia.wav" )
 local gameover = audio.loadSound( "sons/gameover.wav" )
 
 -- A ordem que os grupos foram criados define a ordem que são exibidos
@@ -39,7 +39,6 @@ local backGroup = display.newGroup()  -- Grupo para as imgens de fundo (parede, 
 local mainGroup = display.newGroup()  -- Guarda o personagem e os objetos flutuantes.
 local uiGroup = display.newGroup()    -- Exibir pontuação
 local jumpLimit = 0 
-
 
 function scene:create( event )
 	local physics = require( "physics" )
@@ -51,7 +50,7 @@ function scene:create( event )
 	--physics.pause()
 
 -- Background da parede de tijolos do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local background = display.newImageRect( backGroup, "img/africa/fundo.png", 1920, 1080) 
+	local background = display.newImageRect( backGroup, "img/russia/fundo.png", 1920, 1080) 
 	background.x = largura/2
 	background.y = altura/2
 	background.yScale = 0.3
@@ -59,15 +58,15 @@ function scene:create( event )
 
 
 	-- Chão que vai se mover por cima do outro faz parte do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local chao = display.newImageRect( backGroup, "img/africa/chao.png", 1917, 125) --https://pixabay.com/
+	local chao = display.newImageRect( backGroup, "img/russia/chao.png", 2117, 142) --https://pixabay.com/
 	chao.x = 0
 	chao.y = altura + 10
 	chao.yScale = 0.7
 	physics.addBody( chao, "static", {bounce=0} )
-	-- Chão que vai ficar fixo do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
+
 	
-	local chao1 = display.newImageRect( backGroup, "img/africa/chao.png", 1917, 125) --https://pixabay.com/
-	chao1.x = 1910
+	local chao1 = display.newImageRect( backGroup, "img/russia/chao.png", 2117, 142) --https://pixabay.com/
+	chao1.x = 2110
 	chao1.y = altura + 10
 	chao1.yScale = 0.7
 	physics.addBody( chao1, "static", {bounce=0} )
@@ -79,72 +78,36 @@ function scene:create( event )
 	ceu.alpha = 0
 	physics.addBody( ceu, "static" )
 
-	--physics.addBody( grade1, "static" )
-	local elefante = display.newImageRect( "img/africa/ele.png", 109, 77)
-	elefante.x = 100
-	elefante.y = altura - 70
-	elefante.yScale = 0.5
-	elefante.xScale = 0.5
-	backGroup:insert(elefante)
-	
-	local jacare = display.newImageRect( "img/africa/jac.png", 109, 77)
-	jacare.x = 300
-	jacare.y = altura - 70
-	jacare.yScale = 0.5
-	jacare.xScale = 0.5
-	backGroup:insert(jacare)
-
-	local girafa = display.newImageRect( "img/africa/gir.png", 109, 77)
-	girafa.x = 500
-	girafa.y = altura - 70
-	girafa.yScale = 0.5
-	girafa.xScale = 0.5
-	backGroup:insert(girafa)
-
-	local hipopotamo = display.newImageRect( "img/africa/hip.png", 109, 77)
-	hipopotamo.x = 700
-	hipopotamo.y = altura - 70
-	hipopotamo.yScale = 0.5
-	hipopotamo.xScale = 0.5
-	backGroup:insert(hipopotamo)
-	
-	local leao = display.newImageRect( "img/africa/lea.png", 109, 77)
-	leao.x = 900
-	leao.y = altura - 70
-	leao.yScale = 0.5
-	leao.xScale = 0.5
-	backGroup:insert(leao)
-
-	local onca = display.newImageRect( "img/africa/onc.png", 109, 77)
-	onca.x = 1100
-	onca.y = altura - 70
-	onca.yScale = 0.5
-	onca.xScale = 0.5
-	backGroup:insert(onca)
-
-	
-	local pause = display.newImage("img/base/pause.png")
-	pause.x = largura - 2
-    pause.y = 40
-    pause.yScale = 0.3
-	pause.xScale = 0.3
-	uiGroup:insert(pause)
-	--pause:addEventListener( "tap", gotoMenu )
-
-	local grade = display.newImageRect( backGroup, "img/africa/grade.png", 1920, 152)  
+	local grade = display.newImageRect( backGroup, "img/russia/grade.png", 1921, 78)  
 	grade.x = 0
-	grade.y = altura - 74
+	grade.y = altura - 57
 	grade.yScale = 0.5
 	grade.xScale = 0.5
 	backGroup:insert(grade)
 	--physics.addBody( grade, "static" )
 
-	local grade1 = display.newImageRect( backGroup, "img/africa/grade.png", 1920, 152)  
+	local grade1 = display.newImageRect( backGroup, "img/russia/grade.png", 1921, 78)  
 	grade1.x = 960
-	grade1.y = altura - 74
+	grade1.y = altura - 57
 	grade1.yScale = 0.5
 	grade1.xScale = 0.5
 	backGroup:insert(grade1)
+
+	--physics.addBody( grade1, "static" )
+	local poste = display.newImageRect( "img/russia/poste.png", 179, 216)
+	poste.x = largura/5
+	poste.y = altura - 90
+	poste.yScale = 0.6
+	poste.xScale = 0.6
+	backGroup:insert(poste)
+
+	local pause = display.newImage("img/base/pause.png")
+	pause.x = largura - 2
+    pause.y = 40
+    pause.yScale = 0.3
+	pause.xScale = 0.3
+	sceneGroup:insert(pause)
+	--pause:addEventListener( "tap", gotoMenu )
 
 	local sheetOptions = { width = 67.4, height = 74, numFrames = 20 }
 	--carregamos a spritesheet com as opções
@@ -177,7 +140,6 @@ function scene:create( event )
 	}
 	--criamos um objeto de display com todas as configs anteriores
 	local running = display.newSprite(mainGroup, sheet, sequences )
-	--physics.addBody( running,  "dynamic", { bounce=0} )
 	physics.addBody(running, "dynamic", {radius=15, bounce=0})
 	running.myName = "running"
 	running.x = display.contentWidth / 4 + 40
@@ -347,6 +309,7 @@ function scene:create( event )
 
 	end
 
+
 gameLoopTimer = timer.performWithDelay( 4000, gameLoop, 0 )
 
 
@@ -400,12 +363,13 @@ end
 
 
 local function gameOver()
-	composer.gotoScene("gameover")
+	composer.gotoScene("scene.gameover")
 end
 
 local function novoNivel()
-	composer.gotoScene("parabensBrasil")
+	composer.gotoScene("scene.niveis")
 end
+
 
 
 
@@ -440,7 +404,7 @@ local function onCollision( event )
 					display.remove(backGroup)
 					display.remove( running )
 					display.remove( newinjecao )
-                    display.remove( newSapatilha )
+					display.remove( newSapatilha )
 					novoNivel()		
 				end	
 			end
@@ -466,10 +430,13 @@ local function onCollision( event )
 					end
 
 					-- Verificar se atingiu a pontuação minima de scores
-					if ( score < -9 ) then
+					if ( score < 9 ) then
 						display.remove(mainGroup)
 						display.remove(uiGroup)
 						display.remove(backGroup)	
+						display.remove( running )
+						display.remove( newinjecao )
+						display.remove( newSapatilha )
 						gameOver()
 						--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 					else
@@ -527,10 +494,13 @@ local function onCollision( event )
 						end
 	
 						-- Verificar se atingiu a pontuação minima de scores
-						if ( score < -9 ) then
+						if ( score < 9 ) then
 							display.remove(mainGroup)
 							display.remove(uiGroup)
-							display.remove(backGroup)	
+							display.remove(backGroup)
+							display.remove( running )
+							display.remove( newinjecao )
+							display.remove( newSapatilha )	
 							gameOver()
 							--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 						else
@@ -543,7 +513,6 @@ local function onCollision( event )
 	end
 
 end
-
 Runtime:addEventListener( "collision", onCollision )
 
 local function start(event)
@@ -578,33 +547,29 @@ end
 		 if(running.isVisible) then
 			 local tDelta = event.time - tPrevious
 			 tPrevious = event.time
+			
+			--Mover nuvens
+			--[[local xOffset = ( 0.1 * tDelta )
+			nuvem.x = nuvem.x - xOffset
+			nuvem1.x = nuvem1.x - xOffset
+			 
+			if (nuvem.x + nuvem.contentWidth) < 0 then
+			nuvem:translate( 450 * 2, 0)
+			end
+			if (nuvem1.x + nuvem1.contentWidth) < 0 then
+			nuvem1:translate( 450 * 2, 0)
+			end	]]
 
-			--Mover animais
+			--Mover postes
 			local xOffset = ( 0.1 * tDelta )
-			jacare.x = jacare.x - xOffset
-			elefante.x = elefante.x - xOffset
-			girafa.x = girafa.x - xOffset
-			hipopotamo.x = hipopotamo.x - xOffset
-			leao.x = leao.x - xOffset
-			onca.x = onca.x - xOffset
-
-			if (jacare.x + jacare.contentWidth) < 0 then
-				jacare:translate( 100 * 2, 0)
+			poste.x = poste.x - xOffset
+			poste.x = poste.x - xOffset
+			
+			if (poste.x + poste.contentWidth) < 0 then
+				poste:translate( 400 * 2, 0)
 			end
-			if (elefante.x + elefante.contentWidth) < 0 then
-				elefante:translate( 300 * 2, 0)
-			end
-			if (girafa.x + girafa.contentWidth) < 0 then
-				girafa:translate( 500 * 2, 0)
-			end
-			if (hipopotamo.x + hipopotamo.contentWidth) < 0 then
-				hipopotamo:translate( 700 * 2, 0)
-			end
-			if (leao.x + leao.contentWidth) < 0 then
-				leao:translate( 900 * 2, 0)
-			end
-			if (onca.x + onca.contentWidth) < 0 then
-				onca:translate( 1100 * 2, 0)
+			if (poste.x + poste.contentWidth) < 0 then
+				poste:translate( 400 * 2, 0)
 			end
 	 
 			--Mover Chão
@@ -668,10 +633,11 @@ function scene:hide( event )
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-		-- Code here runs when the scene is on screen (but is about to go off screen)
+		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
-		-- Code here runs immediately after the scene goes entirely off screen
+        composer.removeScene( "russia" )
+
 
 	end
 end
@@ -681,10 +647,10 @@ end
 function scene:destroy( event )
 
 	local sceneGroup = self.view
-	display.remove(uiGroup)
-	display.remove(background)
-	display.remove(mainGroup)
-
+	audio.stop(diminuiu)
+	audio.stop(nivel)
+	audio.stop(somou)
+	physics.stop()
 end
 
 

@@ -11,16 +11,14 @@ math.randomseed( os.time() )
 
 local score = 0 -- Scores iniciados com valor o
 local died = false -- Inicia com o jogador vivo
-local adicionar = 25
-local remover = 25
+local adicionar = 5
+local remover = 5
 local holding
 
--- As tabelas servem para rastrear tipos similares de informação
 local injecaoTable = {}
 local sapatilhaTable = {} 
 local lacoTable = {}
 local remedioTable = {}
-
 
 local bailarina -- Variavél reservada para a personagem do jogo
 local gameLoopTimer -- Implementação de um timer
@@ -32,7 +30,7 @@ local baseline = 280
 local diminuiu = audio.loadSound( "sons/diminuiu.wav" )
 local somou = audio.loadSound( "sons/somou.wav" )
 local nivel = audio.loadSound( "sons/novonivel.wav" )
-local backgroundMusic = audio.loadStream( "sons/infinito.mp3" )
+local backgroundMusic = audio.loadStream( "sons/africa.mp3" )
 local gameover = audio.loadSound( "sons/gameover.wav" )
 
 -- A ordem que os grupos foram criados define a ordem que são exibidos
@@ -41,6 +39,7 @@ local backGroup = display.newGroup()  -- Grupo para as imgens de fundo (parede, 
 local mainGroup = display.newGroup()  -- Guarda o personagem e os objetos flutuantes.
 local uiGroup = display.newGroup()    -- Exibir pontuação
 local jumpLimit = 0 
+
 
 function scene:create( event )
 	local physics = require( "physics" )
@@ -83,42 +82,42 @@ function scene:create( event )
 	--physics.addBody( grade1, "static" )
 	local elefante = display.newImageRect( "img/africa/ele.png", 109, 77)
 	elefante.x = 100
-	elefante.y = altura - 90
+	elefante.y = altura - 70
 	elefante.yScale = 0.5
 	elefante.xScale = 0.5
 	backGroup:insert(elefante)
 	
 	local jacare = display.newImageRect( "img/africa/jac.png", 109, 77)
 	jacare.x = 300
-	jacare.y = altura - 90
+	jacare.y = altura - 70
 	jacare.yScale = 0.5
 	jacare.xScale = 0.5
 	backGroup:insert(jacare)
 
 	local girafa = display.newImageRect( "img/africa/gir.png", 109, 77)
 	girafa.x = 500
-	girafa.y = altura - 90
+	girafa.y = altura - 70
 	girafa.yScale = 0.5
 	girafa.xScale = 0.5
 	backGroup:insert(girafa)
 
 	local hipopotamo = display.newImageRect( "img/africa/hip.png", 109, 77)
 	hipopotamo.x = 700
-	hipopotamo.y = altura - 90
+	hipopotamo.y = altura - 70
 	hipopotamo.yScale = 0.5
 	hipopotamo.xScale = 0.5
 	backGroup:insert(hipopotamo)
 	
 	local leao = display.newImageRect( "img/africa/lea.png", 109, 77)
 	leao.x = 900
-	leao.y = altura - 90
+	leao.y = altura - 70
 	leao.yScale = 0.5
 	leao.xScale = 0.5
 	backGroup:insert(leao)
 
 	local onca = display.newImageRect( "img/africa/onc.png", 109, 77)
 	onca.x = 1100
-	onca.y = altura - 90
+	onca.y = altura - 70
 	onca.yScale = 0.5
 	onca.xScale = 0.5
 	backGroup:insert(onca)
@@ -130,7 +129,6 @@ function scene:create( event )
     pause.yScale = 0.3
 	pause.xScale = 0.3
 	uiGroup:insert(pause)
-	--pause:addEventListener( "tap", gotoMenu )
 
 	local grade = display.newImageRect( backGroup, "img/africa/grade.png", 1920, 152)  
 	grade.x = 0
@@ -176,9 +174,8 @@ function scene:create( event )
 	        loopDirection = "forward"
 	    }
 	}
-	--criamos um objeto de display com todas as configs anteriores
+
 	local running = display.newSprite(mainGroup, sheet, sequences )
-	--physics.addBody( running,  "dynamic", { bounce=0} )
 	physics.addBody(running, "dynamic", {radius=15, bounce=0})
 	running.myName = "running"
 	running.x = display.contentWidth / 4 + 40
@@ -350,7 +347,6 @@ function scene:create( event )
 
 gameLoopTimer = timer.performWithDelay( 4000, gameLoop, 0 )
 
-
 local function restoreBailarina()
     running.isBodyActive = false
     transition.to( running, { alpha=1, time=30,
@@ -363,14 +359,17 @@ end
 
 
 local function gameOver()
-	composer.gotoScene("gameover")
+	composer.gotoScene("scene.gameover")
 end
 
 local function novoNivel()
-	composer.gotoScene("infinito2")
+	composer.gotoScene("scene.parabensBrasil")
 end
 
-
+local function gotoPause()
+	running:pause()
+	physics.pause()
+end
 
 
 local function onCollision( event )
@@ -398,7 +397,7 @@ local function onCollision( event )
 					end
 				end
 
-				if ( score > 99 ) then
+				if ( score > 49 ) then
 					display.remove(mainGroup)
 					display.remove(uiGroup)
 					display.remove(backGroup)
@@ -430,12 +429,14 @@ local function onCollision( event )
 					end
 
 					-- Verificar se atingiu a pontuação minima de scores
-					if ( score < -49 ) then
+					if ( score < -9 ) then
 						display.remove(mainGroup)
 						display.remove(uiGroup)
 						display.remove(backGroup)	
+						display.remove( running )
+						display.remove( newinjecao )
+						display.remove( newSapatilha )
 						gameOver()
-						--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 					else
 						timer.performWithDelay( 500, restoreBailarina)
 					end
@@ -459,7 +460,7 @@ local function onCollision( event )
 						end
 					end
 	
-					if ( score > 99 ) then
+					if ( score > 49 ) then
 						display.remove(mainGroup)
 						display.remove(uiGroup)
 						display.remove(backGroup)
@@ -491,10 +492,13 @@ local function onCollision( event )
 						end
 	
 						-- Verificar se atingiu a pontuação minima de scores
-						if ( score < -49 ) then
+						if ( score < -9 ) then	
 							display.remove(mainGroup)
 							display.remove(uiGroup)
 							display.remove(backGroup)	
+							display.remove( running )
+							display.remove( newinjecao )
+							display.remove( newSapatilha )
 							gameOver()
 							--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 						else
@@ -509,6 +513,7 @@ local function onCollision( event )
 end
 
 Runtime:addEventListener( "collision", onCollision )
+pause:addEventListener( "tap", gotoPause )
 
 local function start(event)
 	waiting.isVisible = false;
@@ -632,12 +637,10 @@ function scene:hide( event )
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-		-- Code here runs when the scene is on screen (but is about to go off screen)
 		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
-		-- Code here runs immediately after the scene goes entirely off screen
-        composer.removeScene( "infinito1" )
+		composer.removeScene( "africa" )
 
 	end
 end
@@ -645,8 +648,11 @@ end
 
 -- destroy()
 function scene:destroy( event )
-
 	local sceneGroup = self.view
+	audio.stop(diminuiu)
+	audio.stop(nivel)
+	audio.stop(somou)
+	physics.stop()
 
 end
 

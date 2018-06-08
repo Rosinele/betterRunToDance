@@ -13,7 +13,7 @@ local uiGroup = display.newGroup()    -- Exibir pontuação
 -- -----------------------------------------------------------------------------------
 
 local function gotoProximo()
-	composer.gotoScene("russia")
+	composer.gotoScene("scene.brasil")
 end
 -- create()
 function scene:create( event )
@@ -45,7 +45,7 @@ function scene:create( event )
 	proximo.y = altura/2 + 100
 	proximo.yScale = 0.3
 	proximo.xScale = 0.3
-	sceneGroup:insert(proximo)
+	proximo:addEventListener("tap", gotoProximo)
 
 	--[[local voltar = display.newImage("img/gameover/voltar.png")
 	voltar.x = largura/5 * 4

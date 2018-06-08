@@ -15,17 +15,17 @@ local altura = display.contentHeight
 local backgroundMusic = audio.loadStream( "sons/menu.mp3" )
 
 local function gotoGame()
-	composer.gotoScene( "modo" )
+	composer.gotoScene( "scene.modo", { effect = "slideDown", params = { } })
 	audio.pause()
 end
 
 local function gotoNivel()
-	composer.gotoScene("niveis")
+	composer.gotoScene("scene.niveis", { effect = "slideDown", params = { } })
 	audio.pause()
 end
 
 local function gotoCredito()
-	composer.gotoScene("creditos")
+	composer.gotoScene("scene.creditos", { effect = "slideDown", params = { } })
 	audio.pause()
 end
 
@@ -157,7 +157,7 @@ function scene:destroy( event )
 
 	local sceneGroup = self.view
 	display.remove(sceneGroup)
-	--audio.pause()
+	audio.pause()
 	
 end
 

@@ -9,8 +9,6 @@ local scene = composer.newScene()
 local largura = display.contentWidth
 local altura = display.contentHeight
 
---physics.setGravity(0, 1) -- definindo o valor da gravidade para 0
-
 math.randomseed( os.time() )
 
 local score = 0 -- Scores iniciados com valor o
@@ -51,7 +49,6 @@ function scene:create( event )
 	audio.play( backgroundMusic )
 
 	local sceneGroup = self.view
-	--physics.pause()
 
 -- Background da parede de tijolos do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
 	local background = display.newImageRect( backGroup, "img/russia/fundo.png", 1920, 1080) 
@@ -88,7 +85,6 @@ function scene:create( event )
 	grade.yScale = 0.5
 	grade.xScale = 0.5
 	backGroup:insert(grade)
-	--physics.addBody( grade, "static" )
 
 	local grade1 = display.newImageRect( backGroup, "img/russia/grade.png", 1921, 78)  
 	grade1.x = 960
@@ -97,7 +93,6 @@ function scene:create( event )
 	grade1.xScale = 0.5
 	backGroup:insert(grade1)
 
-	--physics.addBody( grade1, "static" )
 	local poste = display.newImageRect( "img/russia/poste.png", 179, 216)
 	poste.x = largura/5
 	poste.y = altura - 90
@@ -144,7 +139,6 @@ function scene:create( event )
 	}
 	--criamos um objeto de display com todas as configs anteriores
 	local running = display.newSprite(mainGroup, sheet, sequences )
-	--physics.addBody( running,  "dynamic", { bounce=0} )
 	physics.addBody(running, "dynamic", {radius=15, bounce=0})
 	running.myName = "running"
 	running.x = display.contentWidth / 4 + 40
@@ -316,45 +310,6 @@ function scene:create( event )
 
 gameLoopTimer = timer.performWithDelay( 4000, gameLoop, 0 )
 
-
-function pauseGame()
-	gamePaused = true
-	running:pause()
-	physics.pause()
-	timer.pause(gameLoop)
-	timer.pause(gameLoopTimer)
-	local pauseGroup = display.newGroup()
-
-	local pauserect = display.newRect(0, 0, display.contentWidth+450, 640)
-	pauserect.x = display.contentWidth/2 + 180
-	pauserect:setFillColor(0)
-	pauserect.alpha = 0.75
-	pauserect:addEventListener("tap", function() return true end)
-	pauseGroup:insert(pauserect)
-
-	local resumebox = display.newImageRect("img/paredeBackground.png", display.contentWidth/2+200, display.contentHeight/2+100 )
-		resumebox.x = display.contentWidth/2
-		resumebox.y = display.contentHeight/2
-		pauseGroup:insert(resumebox)
-
-	local resumebtn = display.newImageRect("img/voltar.png", 60, 60)
-		resumebtn.x = 100
-		resumebtn.y = 100
-		resumebtn:addEventListener("tap", resumeGame)
-		pauseGroup:insert(resumebtn)
-end
-
-function buildPause(player)
-	local pausebtn = display.newImageRect("img/voltar.png", 60, 60)
-	pausebtn.x = display.contentWidth
-	pausebtn.y = 280
-	pausebtn:addEventListener("tap", pauseGame)
-	playerT = player
-	print(playerT)
-	headerGroup:insert(pausebtn)
-end
-
-
 local function restoreBailarina()
     running.isBodyActive = false
     transition.to( running, { alpha=1, time=30,
@@ -367,11 +322,11 @@ end
 
 
 local function gameOver()
-	composer.gotoScene("gameover")
+	composer.gotoScene("scene.gameover")
 end
 
 local function novoNivel()
-	composer.gotoScene("niveis")
+	composer.gotoScene("scene.niveis")
 end
 
 
@@ -645,7 +600,10 @@ end
 function scene:destroy( event )
 
 	local sceneGroup = self.view
-	
+	audio.stop(diminuiu)
+	audio.stop(nivel)
+	audio.stop(somou)
+
 end
 
 

@@ -6,15 +6,15 @@ local largura = display.contentWidth
 local altura = display.contentHeight
 
 local function gotoRapido()
-    composer.gotoScene( "africa" )
+    composer.gotoScene( "scene.africa" )
 end
 
 local function gotoInfinito()
-	composer.gotoScene("infinito1")
+	composer.gotoScene("scene.infinito1")
 end
 
 local function gotoMenu()
-	composer.gotoScene("menu")
+	composer.gotoScene("scene.menu", { effect = "slideUp", params = { } })
 end
 -- -----------------------------------------------------------------------------------
 -- Scene event functions

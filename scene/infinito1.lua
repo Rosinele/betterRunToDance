@@ -1,7 +1,3 @@
---================================================================================
---===========================    Brasil   ========================================
---================================================================================
-
 
 local composer = require( "composer" )
 local scene = composer.newScene()
@@ -9,7 +5,6 @@ local scene = composer.newScene()
 local largura = display.contentWidth
 local altura = display.contentHeight
 
---physics.setGravity(0, 1) -- definindo o valor da gravidade para 0
 
 math.randomseed( os.time() )
 
@@ -19,10 +14,12 @@ local adicionar = 25
 local remover = 25
 local holding
 
+-- As tabelas servem para rastrear tipos similares de informação
 local injecaoTable = {}
 local sapatilhaTable = {} 
 local lacoTable = {}
 local remedioTable = {}
+
 
 local bailarina -- Variavél reservada para a personagem do jogo
 local gameLoopTimer -- Implementação de um timer
@@ -47,52 +44,32 @@ local jumpLimit = 0
 function scene:create( event )
 	local physics = require( "physics" )
 	physics.start()
-	physics.setGravity(0, 9.6)
+	physics.setGravity(0, 9.8)
 	audio.play( backgroundMusic )
-	
-	
-	local sceneGroup = self.view
-	--physics.pause()
 
-	sceneGroup:insert(mainGroup)
+	local sceneGroup = self.view
+
 -- Background da parede de tijolos do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local background = display.newImageRect( backGroup, "img/brasil/fundo.png", 1920, 1080) 
+	local background = display.newImageRect( backGroup, "img/africa/fundo.png", 1920, 1080) 
 	background.x = largura/2
-	background.y = display.contentCenterY
+	background.y = altura/2
 	background.yScale = 0.3
 	background.xScale = 0.3
-	backGroup:insert(background)
 
-	-- nuvem do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local nuvem = display.newImageRect( "img/brasil/nuvem.png", 1920, 1080)
-	nuvem.x = 0
-	nuvem.y = display.contentCenterY
-	nuvem.yScale = 0.3
-	nuvem.xScale = 0.3
-	uiGroup:insert(nuvem)
-
-	local nuvem1 = display.newImageRect( "img/brasil/nuvem.png", 1920, 1080)
-	nuvem1.x = 600
-	nuvem1.y = display.contentCenterY
-	nuvem1.yScale = 0.3
-	nuvem1.xScale = 0.3
-	uiGroup:insert(nuvem1)
 
 	-- Chão que vai se mover por cima do outro faz parte do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local chao = display.newImageRect( backGroup, "img/brasil/chao.png", 2117, 142) --https://pixabay.com/
+	local chao = display.newImageRect( backGroup, "img/africa/chao.png", 1917, 125) --https://pixabay.com/
 	chao.x = 0
 	chao.y = altura + 10
 	chao.yScale = 0.7
-	backGroup:insert(chao)
 	physics.addBody( chao, "static", {bounce=0} )
 	-- Chão que vai ficar fixo do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
 	
-	local chao1 = display.newImageRect( backGroup, "img/brasil/chao.png", 2117, 142) --https://pixabay.com/
-	chao1.x = 2110
+	local chao1 = display.newImageRect( backGroup, "img/africa/chao.png", 1917, 125) --https://pixabay.com/
+	chao1.x = 1910
 	chao1.y = altura + 10
 	chao1.yScale = 0.7
-	backGroup:insert(chao1)
-	physics.addBody( chao1, "static" )
+	physics.addBody( chao1, "static", {bounce=0} )
 
 	local ceu = display.newImageRect( backGroup, "img/base/ceu.png", 2117, 142) --https://pixabay.com/
 	ceu.x = 0
@@ -100,42 +77,72 @@ function scene:create( event )
 	ceu.yScale = 0.7
 	ceu.alpha = 0
 	physics.addBody( ceu, "static" )
+
+	local elefante = display.newImageRect( "img/africa/ele.png", 109, 77)
+	elefante.x = 100
+	elefante.y = altura - 90
+	elefante.yScale = 0.5
+	elefante.xScale = 0.5
+	backGroup:insert(elefante)
 	
-	-- posted do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local posted = display.newImageRect( "img/brasil/posted.png", 118, 304)
-	posted.x = largura/5
-	posted.y = altura - 97
-	posted.yScale = 0.4
-	posted.xScale = 0.4
-	backGroup:insert(posted)
+	local jacare = display.newImageRect( "img/africa/jac.png", 109, 77)
+	jacare.x = 300
+	jacare.y = altura - 90
+	jacare.yScale = 0.5
+	jacare.xScale = 0.5
+	backGroup:insert(jacare)
 
-	local postee = display.newImageRect( "img/brasil/postee.png", 118, 304)
-	postee.x = largura/3
-	postee.y = altura - 97
-	postee.yScale = 0.4
-	postee.xScale = 0.4
-	backGroup:insert(postee)
+	local girafa = display.newImageRect( "img/africa/gir.png", 109, 77)
+	girafa.x = 500
+	girafa.y = altura - 90
+	girafa.yScale = 0.5
+	girafa.xScale = 0.5
+	backGroup:insert(girafa)
 
-	local coqueiro1 = display.newImageRect( "img/brasil/coqueiro1.png", 118, 304)
-	coqueiro1.x = largura
-	coqueiro1.y = altura - 97
-	coqueiro1.yScale = 0.4
-	coqueiro1.xScale = 0.4
-	backGroup:insert(coqueiro1)
+	local hipopotamo = display.newImageRect( "img/africa/hip.png", 109, 77)
+	hipopotamo.x = 700
+	hipopotamo.y = altura - 90
+	hipopotamo.yScale = 0.5
+	hipopotamo.xScale = 0.5
+	backGroup:insert(hipopotamo)
+	
+	local leao = display.newImageRect( "img/africa/lea.png", 109, 77)
+	leao.x = 900
+	leao.y = altura - 90
+	leao.yScale = 0.5
+	leao.xScale = 0.5
+	backGroup:insert(leao)
 
-	local coqueiro2 = display.newImageRect( "img/brasil/coqueiro2.png", 118, 304)
-	coqueiro2.x = largura/6
-	coqueiro2.y = altura - 97
-	coqueiro2.yScale = 0.4
-	coqueiro2.xScale = 0.4
-	backGroup:insert(coqueiro2)
+	local onca = display.newImageRect( "img/africa/onc.png", 109, 77)
+	onca.x = 1100
+	onca.y = altura - 90
+	onca.yScale = 0.5
+	onca.xScale = 0.5
+	backGroup:insert(onca)
 
+	
 	local pause = display.newImage("img/base/pause.png")
 	pause.x = largura - 2
     pause.y = 40
     pause.yScale = 0.3
 	pause.xScale = 0.3
-	sceneGroup:insert(pause)
+	uiGroup:insert(pause)
+	--pause:addEventListener( "tap", gotoMenu )
+
+	local grade = display.newImageRect( backGroup, "img/africa/grade.png", 1920, 152)  
+	grade.x = 0
+	grade.y = altura - 74
+	grade.yScale = 0.5
+	grade.xScale = 0.5
+	backGroup:insert(grade)
+
+
+	local grade1 = display.newImageRect( backGroup, "img/africa/grade.png", 1920, 152)  
+	grade1.x = 960
+	grade1.y = altura - 74
+	grade1.yScale = 0.5
+	grade1.xScale = 0.5
+	backGroup:insert(grade1)
 
 	local sheetOptions = { width = 67.4, height = 74, numFrames = 20 }
 	--carregamos a spritesheet com as opções
@@ -167,12 +174,11 @@ function scene:create( event )
 	    }
 	}
 	--criamos um objeto de display com todas as configs anteriores
-	local running = display.newSprite(uiGroup, sheet, sequences )
-	--physics.addBody( running,  "dynamic", { bounce=0} )
+	local running = display.newSprite(mainGroup, sheet, sequences )
 	physics.addBody(running, "dynamic", {radius=15, bounce=0})
 	running.myName = "running"
 	running.x = display.contentWidth / 4 + 40
-	running.y = 255
+	running.y = altura -90 --distância da bailarina ao chão
 
 	--[[local jumping = display.newSprite( sheet2, sequences2 )
 	jumping.x = display.contentWidth / 4 + 40
@@ -193,7 +199,7 @@ function scene:create( event )
 	waiting.yScale = 1.2
 	waiting.isVisible = false;
 
-	scoreText = display.newText( uiGroup, "Experiência: " .. score, 200, 80, native.systemFont, 26 ) --Concatena o texto com a variável score
+	scoreText = display.newText( uiGroup, "Experiência: " .. score, 0, 0, native.systemFont, 26 ) --Concatena o texto com a variável score
 	scoreText.x = largura/9
 	scoreText.y = altura/9
 	scoreText:setFillColor(0, 0, 1) -- Define a cor do texto
@@ -338,14 +344,12 @@ function scene:create( event )
 
 	end
 
-gameLoopTimer = timer.performWithDelay( 3000, gameLoop, 0 )
+gameLoopTimer = timer.performWithDelay( 4000, gameLoop, 0 )
+
 
 local function restoreBailarina()
- 
     running.isBodyActive = false
- 
-    -- Fade in the Bailarina
-    transition.to( running, { alpha=1, time=50,
+    transition.to( running, { alpha=1, time=30,
         onComplete = function()
             running.isBodyActive = true
             died = false
@@ -353,13 +357,17 @@ local function restoreBailarina()
     } )
 end
 
+
 local function gameOver()
-	composer.gotoScene("gameover")
+	composer.gotoScene("scene.gameover")
 end
 
 local function novoNivel()
-	composer.gotoScene("infinito3")
+	composer.gotoScene("scene.infinito2")
 end
+
+
+
 
 local function onCollision( event )
  
@@ -517,8 +525,8 @@ end
 
 
 	local function jumping(event)
-		running:applyLinearImpulse(0, -0.06, running.x, running.y)
-		--running:setSequence("jumping")
+				running:applyLinearImpulse(0, -0.06, running.x, running.y)
+				--running:setSequence("jumping")
 	end
 	 
 	background:addEventListener( "tap", jumping )
@@ -530,53 +538,57 @@ end
 		 if(running.isVisible) then
 			 local tDelta = event.time - tPrevious
 			 tPrevious = event.time
-			
-			--Mover nuvens
-			local xOffset = ( 0.2 * tDelta )
-			nuvem.x = nuvem.x - xOffset
-			nuvem1.x = nuvem1.x - xOffset
-			 
-			if (nuvem.x + nuvem.contentWidth) < 0 then
-			nuvem:translate( 700 * 2, 0)
-			end
-			if (nuvem1.x + nuvem1.contentWidth) < 0 then
-			nuvem1:translate( 700 * 2, 0)
-			end	
 
-			--Mover coqueiros
+			--Mover animais
 			local xOffset = ( 0.1 * tDelta )
-			coqueiro1.x = coqueiro1.x - xOffset
-			coqueiro2.x = coqueiro2.x - xOffset
-			 
-			if (coqueiro1.x + coqueiro1.contentWidth) < 0 then
-				coqueiro1:translate( 380 * 2, 0)
-			end
-			if (coqueiro2.x + coqueiro2.contentWidth) < 0 then
-				coqueiro2:translate( 380 * 2, 0)
-			end
+			jacare.x = jacare.x - xOffset
+			elefante.x = elefante.x - xOffset
+			girafa.x = girafa.x - xOffset
+			hipopotamo.x = hipopotamo.x - xOffset
+			leao.x = leao.x - xOffset
+			onca.x = onca.x - xOffset
 
-			--Mover postes
-			local xOffset = ( 0.1 * tDelta )
-			posted.x = posted.x - xOffset
-			postee.x = postee.x - xOffset
-			
-			if (posted.x + posted.contentWidth) < 0 then
-				posted:translate( 400 * 2, 0)
+			if (jacare.x + jacare.contentWidth) < 0 then
+				jacare:translate( 100 * 2, 0)
 			end
-			if (postee.x + postee.contentWidth) < 0 then
-				postee:translate( 400 * 2, 0)
+			if (elefante.x + elefante.contentWidth) < 0 then
+				elefante:translate( 300 * 2, 0)
+			end
+			if (girafa.x + girafa.contentWidth) < 0 then
+				girafa:translate( 500 * 2, 0)
+			end
+			if (hipopotamo.x + hipopotamo.contentWidth) < 0 then
+				hipopotamo:translate( 700 * 2, 0)
+			end
+			if (leao.x + leao.contentWidth) < 0 then
+				leao:translate( 900 * 2, 0)
+			end
+			if (onca.x + onca.contentWidth) < 0 then
+				onca:translate( 1100 * 2, 0)
 			end
 	 
 			--Mover Chão
-			local xOffset = ( 0.16 * tDelta )
+			local xOffset = ( 0.1 * tDelta )
 			chao.x = chao.x - xOffset
 			chao1.x = chao1.x - xOffset
 			  
 			if (chao.x + chao.contentWidth) < 0 then
-				chao:translate( 2100 * 2, 0)
+				chao:translate( 1915 * 2, 0)
 			end
 			if (chao1.x + chao1.contentWidth) < 0 then
-				chao1:translate( 2100 * 2, 0)
+				chao1:translate( 1915 * 2, 0)
+			end			
+
+			--Mover grades
+			local xOffset = ( 0.2 * tDelta )
+			grade.x = grade.x - xOffset
+			grade1.x = grade1.x - xOffset
+			  
+			if (grade.x + grade.contentWidth) < 0 then
+				grade:translate( 960 * 2, 0)
+			end
+			if (grade1.x + grade1.contentWidth) < 0 then
+				grade1:translate( 960 * 2, 0)
 			end			
 		 end
 	end
@@ -616,12 +628,11 @@ function scene:hide( event )
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-		-- Code here runs when the scene is on screen (but is about to go off screen)
 		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
-		-- Code here runs immediately after the scene goes entirely off screen
-		composer.removeScene( "infinito2" )
+        composer.removeScene( "infinito1" )
+
 	end
 end
 
@@ -630,6 +641,9 @@ end
 function scene:destroy( event )
 
 	local sceneGroup = self.view
+	audio.stop(diminuiu)
+	audio.stop(nivel)
+	audio.stop(somou)
 
 end
 

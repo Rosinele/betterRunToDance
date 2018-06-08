@@ -30,7 +30,7 @@ local baseline = 280
 local diminuiu = audio.loadSound( "sons/diminuiu.mp3" )
 local somou = audio.loadSound( "sons/somou.wav" )
 local nivel = audio.loadSound( "sons/novonivel.wav" )
-local backgroundMusic = audio.loadStream( "sons/russia.wav" )
+local backgroundMusic = audio.loadStream( "sons/brasil.mp3" )
 local gameover = audio.loadSound( "sons/gameover.wav" )
 
 -- A ordem que os grupos foram criados define a ordem que são exibidos
@@ -40,35 +40,58 @@ local mainGroup = display.newGroup()  -- Guarda o personagem e os objetos flutua
 local uiGroup = display.newGroup()    -- Exibir pontuação
 local jumpLimit = 0 
 
+
+local function novoNivel()
+	composer.gotoScene("scene.parabensRussia")
+end
+
+
 function scene:create( event )
 	local physics = require( "physics" )
 	physics.start()
-	physics.setGravity(0, 9.8)
+	physics.setGravity(0, 9.6)
 	audio.play( backgroundMusic )
-
+	
 	local sceneGroup = self.view
 	--physics.pause()
 
+	sceneGroup:insert(mainGroup)
 -- Background da parede de tijolos do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local background = display.newImageRect( backGroup, "img/russia/fundo.png", 1920, 1080) 
+	local background = display.newImageRect( backGroup, "img/brasil/fundo.png", 1920, 1080) 
 	background.x = largura/2
-	background.y = altura/2
+	background.y = display.contentCenterY
 	background.yScale = 0.3
 	background.xScale = 0.3
+	backGroup:insert(background)
 
+	-- nuvem do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
+	local nuvem = display.newImageRect( "img/brasil/nuvem.png", 1920, 1080)
+	nuvem.x = 0
+	nuvem.y = display.contentCenterY
+	nuvem.yScale = 0.3
+	nuvem.xScale = 0.3
+	uiGroup:insert(nuvem)
+
+	local nuvem1 = display.newImageRect( "img/brasil/nuvem.png", 1920, 1080)
+	nuvem1.x = 600
+	nuvem1.y = display.contentCenterY
+	nuvem1.yScale = 0.3
+	nuvem1.xScale = 0.3
+	uiGroup:insert(nuvem1)
 
 	-- Chão que vai se mover por cima do outro faz parte do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
-	local chao = display.newImageRect( backGroup, "img/russia/chao.png", 2117, 142) --https://pixabay.com/
+	local chao = display.newImageRect( backGroup, "img/brasil/chao.png", 2117, 142) --https://pixabay.com/
 	chao.x = 0
 	chao.y = altura + 10
 	chao.yScale = 0.7
+	backGroup:insert(chao)
 	physics.addBody( chao, "static", {bounce=0} )
-	-- Chão que vai ficar fixo do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
 	
-	local chao1 = display.newImageRect( backGroup, "img/russia/chao.png", 2117, 142) --https://pixabay.com/
+	local chao1 = display.newImageRect( backGroup, "img/brasil/chao.png", 2117, 142) --https://pixabay.com/
 	chao1.x = 2110
 	chao1.y = altura + 10
 	chao1.yScale = 0.7
+	backGroup:insert(chao1)
 	physics.addBody( chao1, "static", {bounce=0} )
 
 	local ceu = display.newImageRect( backGroup, "img/base/ceu.png", 2117, 142) --https://pixabay.com/
@@ -77,29 +100,35 @@ function scene:create( event )
 	ceu.yScale = 0.7
 	ceu.alpha = 0
 	physics.addBody( ceu, "static" )
+	
+	-- posted do backGroup com largura e altura (o primeiro parametro define em qual grupo a imagem deve ser carregada)
+	local posted = display.newImageRect( "img/brasil/posted.png", 118, 304)
+	posted.x = largura/5
+	posted.y = altura - 97
+	posted.yScale = 0.4
+	posted.xScale = 0.4
+	backGroup:insert(posted)
 
-	local grade = display.newImageRect( backGroup, "img/russia/grade.png", 1921, 78)  
-	grade.x = 0
-	grade.y = altura - 57
-	grade.yScale = 0.5
-	grade.xScale = 0.5
-	backGroup:insert(grade)
-	--physics.addBody( grade, "static" )
+	local postee = display.newImageRect( "img/brasil/postee.png", 118, 304)
+	postee.x = largura/3
+	postee.y = altura - 97
+	postee.yScale = 0.4
+	postee.xScale = 0.4
+	backGroup:insert(postee)
 
-	local grade1 = display.newImageRect( backGroup, "img/russia/grade.png", 1921, 78)  
-	grade1.x = 960
-	grade1.y = altura - 57
-	grade1.yScale = 0.5
-	grade1.xScale = 0.5
-	backGroup:insert(grade1)
+	local coqueiro1 = display.newImageRect( "img/brasil/coqueiro1.png", 118, 304)
+	coqueiro1.x = largura
+	coqueiro1.y = altura - 97
+	coqueiro1.yScale = 0.4
+	coqueiro1.xScale = 0.4
+	backGroup:insert(coqueiro1)
 
-	--physics.addBody( grade1, "static" )
-	local poste = display.newImageRect( "img/russia/poste.png", 179, 216)
-	poste.x = largura/5
-	poste.y = altura - 90
-	poste.yScale = 0.6
-	poste.xScale = 0.6
-	backGroup:insert(poste)
+	local coqueiro2 = display.newImageRect( "img/brasil/coqueiro2.png", 118, 304)
+	coqueiro2.x = largura/6
+	coqueiro2.y = altura - 97
+	coqueiro2.yScale = 0.4
+	coqueiro2.xScale = 0.4
+	backGroup:insert(coqueiro2)
 
 	local pause = display.newImage("img/base/pause.png")
 	pause.x = largura - 2
@@ -139,12 +168,11 @@ function scene:create( event )
 	    }
 	}
 	--criamos um objeto de display com todas as configs anteriores
-	local running = display.newSprite(mainGroup, sheet, sequences )
-	--physics.addBody( running,  "dynamic", { bounce=0} )
+	local running = display.newSprite(uiGroup, sheet, sequences )
 	physics.addBody(running, "dynamic", {radius=15, bounce=0})
 	running.myName = "running"
 	running.x = display.contentWidth / 4 + 40
-	running.y = altura -90 --distância da bailarina ao chão
+	running.y = 255
 
 	--[[local jumping = display.newSprite( sheet2, sequences2 )
 	jumping.x = display.contentWidth / 4 + 40
@@ -153,6 +181,13 @@ function scene:create( event )
 	jumping.xScale = 1.2
 	jumping.yScale = 1.2
 	jumping.isVisible = false;]]
+
+	local ceu = display.newImageRect( backGroup, "img/base/ceu.png", 2117, 142) --https://pixabay.com/
+	ceu.x = 0
+	ceu.y = 0
+	ceu.yScale = 0.7
+	ceu.alpha = 0
+	physics.addBody( ceu, "static" )
 
 	--manda rodar
 	running:play()
@@ -165,7 +200,7 @@ function scene:create( event )
 	waiting.yScale = 1.2
 	waiting.isVisible = false;
 
-	scoreText = display.newText( uiGroup, "Experiência: " .. score, 0, 0, native.systemFont, 26 ) --Concatena o texto com a variável score
+	scoreText = display.newText( uiGroup, "Experiência: " .. score, 200, 80, native.systemFont, 26 ) --Concatena o texto com a variável score
 	scoreText.x = largura/9
 	scoreText.y = altura/9
 	scoreText:setFillColor(0, 0, 1) -- Define a cor do texto
@@ -311,50 +346,14 @@ function scene:create( event )
 	end
 
 
-gameLoopTimer = timer.performWithDelay( 4000, gameLoop, 0 )
-
-
-function pauseGame()
-	gamePaused = true
-	running:pause()
-	physics.pause()
-	timer.pause(gameLoop)
-	timer.pause(gameLoopTimer)
-	local pauseGroup = display.newGroup()
-
-	local pauserect = display.newRect(0, 0, display.contentWidth+450, 640)
-	pauserect.x = display.contentWidth/2 + 180
-	pauserect:setFillColor(0)
-	pauserect.alpha = 0.75
-	pauserect:addEventListener("tap", function() return true end)
-	pauseGroup:insert(pauserect)
-
-	local resumebox = display.newImageRect("img/paredeBackground.png", display.contentWidth/2+200, display.contentHeight/2+100 )
-		resumebox.x = display.contentWidth/2
-		resumebox.y = display.contentHeight/2
-		pauseGroup:insert(resumebox)
-
-	local resumebtn = display.newImageRect("img/voltar.png", 60, 60)
-		resumebtn.x = 100
-		resumebtn.y = 100
-		resumebtn:addEventListener("tap", resumeGame)
-		pauseGroup:insert(resumebtn)
-end
-
-function buildPause(player)
-	local pausebtn = display.newImageRect("img/voltar.png", 60, 60)
-	pausebtn.x = display.contentWidth
-	pausebtn.y = 280
-	pausebtn:addEventListener("tap", pauseGame)
-	playerT = player
-	print(playerT)
-	headerGroup:insert(pausebtn)
-end
-
+gameLoopTimer = timer.performWithDelay( 3000, gameLoop, 0 )
 
 local function restoreBailarina()
+ 
     running.isBodyActive = false
-    transition.to( running, { alpha=1, time=30,
+ 
+    -- Fade in the Bailarina
+    transition.to( running, { alpha=1, time=50,
         onComplete = function()
             running.isBodyActive = true
             died = false
@@ -362,17 +361,13 @@ local function restoreBailarina()
     } )
 end
 
-
 local function gameOver()
-	composer.gotoScene("gameover")
+	composer.gotoScene("scene.gameover")
 end
 
-local function novoNivel()
-	composer.gotoScene("niveis")
+local function parabens()
+	composer.gotoScene("scene.parabens")
 end
-
-
-
 
 local function onCollision( event )
  
@@ -431,12 +426,14 @@ local function onCollision( event )
 					end
 
 					-- Verificar se atingiu a pontuação minima de scores
-					if ( score < 9 ) then
-						display.remove(mainGroup)
-						display.remove(uiGroup)
-						display.remove(backGroup)	
+					if ( score < -9 ) then
+						display.remove( mainGroup)
+						display.remove( uiGroup)
+						display.remove( backGroup)	
+						display.remove( running )
+						display.remove( newinjecao )
+						display.remove( newSapatilha )
 						gameOver()
-						--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
 					else
 						timer.performWithDelay( 500, restoreBailarina)
 					end
@@ -461,9 +458,9 @@ local function onCollision( event )
 					end
 	
 					if ( score > 49 ) then
-						display.remove(mainGroup)
-						display.remove(uiGroup)
-						display.remove(backGroup)
+						display.remove( mainGroup)
+						display.remove( uiGroup)
+						display.remove( backGroup)
 						display.remove( running )
 						display.remove( newinjecao )
 						display.remove( newSapatilha )
@@ -492,12 +489,14 @@ local function onCollision( event )
 						end
 	
 						-- Verificar se atingiu a pontuação minima de scores
-						if ( score < 9 ) then
-							display.remove(mainGroup)
-							display.remove(uiGroup)
-							display.remove(backGroup)	
-							gameOver()
-							--local myText = display.newText( "GAME OVER!", 100, 200, native.systemFont, 16 )
+						if ( score < -9 ) then
+							display.remove( mainGroup)
+							display.remove( uiGroup)
+							display.remove( backGroup)	
+							display.remove( running )
+							display.remove( newinjecao )
+							display.remove( newSapatilha )
+							gameOver()						
 						else
 							timer.performWithDelay( 500, restoreBailarina)
 						end
@@ -508,6 +507,7 @@ local function onCollision( event )
 	end
 
 end
+
 Runtime:addEventListener( "collision", onCollision )
 
 local function start(event)
@@ -544,51 +544,51 @@ end
 			 tPrevious = event.time
 			
 			--Mover nuvens
-			--[[local xOffset = ( 0.1 * tDelta )
+			local xOffset = ( 0.2 * tDelta )
 			nuvem.x = nuvem.x - xOffset
 			nuvem1.x = nuvem1.x - xOffset
 			 
 			if (nuvem.x + nuvem.contentWidth) < 0 then
-			nuvem:translate( 450 * 2, 0)
+			nuvem:translate( 700 * 2, 0)
 			end
 			if (nuvem1.x + nuvem1.contentWidth) < 0 then
-			nuvem1:translate( 450 * 2, 0)
-			end	]]
+			nuvem1:translate( 700 * 2, 0)
+			end	
+
+			--Mover coqueiros
+			local xOffset = ( 0.1 * tDelta )
+			coqueiro1.x = coqueiro1.x - xOffset
+			coqueiro2.x = coqueiro2.x - xOffset
+			 
+			if (coqueiro1.x + coqueiro1.contentWidth) < 0 then
+				coqueiro1:translate( 380 * 2, 0)
+			end
+			if (coqueiro2.x + coqueiro2.contentWidth) < 0 then
+				coqueiro2:translate( 380 * 2, 0)
+			end
 
 			--Mover postes
 			local xOffset = ( 0.1 * tDelta )
-			poste.x = poste.x - xOffset
-			poste.x = poste.x - xOffset
+			posted.x = posted.x - xOffset
+			postee.x = postee.x - xOffset
 			
-			if (poste.x + poste.contentWidth) < 0 then
-				poste:translate( 400 * 2, 0)
+			if (posted.x + posted.contentWidth) < 0 then
+				posted:translate( 400 * 2, 0)
 			end
-			if (poste.x + poste.contentWidth) < 0 then
-				poste:translate( 400 * 2, 0)
+			if (postee.x + postee.contentWidth) < 0 then
+				postee:translate( 400 * 2, 0)
 			end
 	 
 			--Mover Chão
-			local xOffset = ( 0.1 * tDelta )
+			local xOffset = ( 0.16 * tDelta )
 			chao.x = chao.x - xOffset
 			chao1.x = chao1.x - xOffset
 			  
 			if (chao.x + chao.contentWidth) < 0 then
-				chao:translate( 1915 * 2, 0)
+				chao:translate( 2100 * 2, 0)
 			end
 			if (chao1.x + chao1.contentWidth) < 0 then
-				chao1:translate( 1915 * 2, 0)
-			end			
-
-			--Mover grades
-			local xOffset = ( 0.2 * tDelta )
-			grade.x = grade.x - xOffset
-			grade1.x = grade1.x - xOffset
-			  
-			if (grade.x + grade.contentWidth) < 0 then
-				grade:translate( 960 * 2, 0)
-			end
-			if (grade1.x + grade1.contentWidth) < 0 then
-				grade1:translate( 960 * 2, 0)
+				chao1:translate( 2100 * 2, 0)
 			end			
 		 end
 	end
@@ -628,10 +628,10 @@ function scene:hide( event )
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-		-- Code here runs when the scene is on screen (but is about to go off screen)
+		timer.cancel( gameLoopTimer )
 
 	elseif ( phase == "did" ) then
-		-- Code here runs immediately after the scene goes entirely off screen
+        composer.removeScene( "brasil" )
 
 	end
 end
@@ -644,9 +644,8 @@ function scene:destroy( event )
 	audio.stop(diminuiu)
 	audio.stop(nivel)
 	audio.stop(somou)
-	display.remove(uiGroup)
-	display.remove(background)
-	display.remove(mainGroup)
+	physics.stop()
+
 
 end
 

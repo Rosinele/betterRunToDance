@@ -13,7 +13,7 @@ local uiGroup = display.newGroup()    -- Exibir pontuação
 -- -----------------------------------------------------------------------------------
 
 local function gotoMenu()
-	composer.gotoScene("menu")
+	composer.gotoScene("scene.menu", { effect = "slideUp", params = { } })
 end
 
 
@@ -25,7 +25,7 @@ function scene:create( event )
 	-- O dobro da parede2 para fazer a animação--
 
 
-	local background = display.newImage("img/niveis/reforma.png")
+	local background = display.newImage("img/credito/credito.png")
 	background.x = largura/2
 	background.y = altura/2
 	background.yScale = 0.3
